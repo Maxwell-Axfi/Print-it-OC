@@ -26,32 +26,52 @@ var position = 0;
 bannerImg.src = imgPath + slides[position].image;
 tagLine.innerHTML = slides[position].tagLine;
 
-//Flèche gauche
-const flecheGauche = document.querySelector(".arrow_left");
-flecheGauche .addEventListener("click", function () {
-	position = position - 1;
-	if(position < 0) {
-		position = slides.length - 1;
+
+//Fonction slide
+var slide = (direction) => {
+
+	const directions = [
+	"left", "right"
+	]
+
+	if (!directions.includes(direction)) {
+		throw new Error("Left ou right sont uniquement autorisés.");
 	}
+	
+	if (direction === 'left') {
+		position = (position - 1 + slides.length) % slides.length;
+	}
+
+	if (direction === 'right') {
+		position = (position + 1) % slides.length;
+	}
+
 	bannerImg.src = imgPath + slides[position].image;
 	tagLine.innerHTML = slides[position].tagLine;
 	dot();
+}
+
+//Flèche gauche
+const flecheGauche = document.querySelector(".arrow_left");
+flecheGauche .addEventListener("click", function () {
+	try {
+			slide('left');
+		} catch(e) {
+			console.log(e.message);
+		}
 });
 
 //Flèche droite
 const flecheDroite = document.querySelector(".arrow_right");
 flecheDroite .addEventListener("click", function () {
-	position = position + 1;
-	if(position > slides.length - 1) {
-		position = 0;
-	}
-	bannerImg.src = imgPath + slides[position].image;
-	tagLine.innerHTML = slides[position].tagLine;
-	dot();
+	try {
+			slide('right');
+		} catch(e) {
+			console.log(e.message);
+		}
 });
 
 //Pagination
-
 var dot = () => {
 	
 	sectionBanner.innerHTML = "";
